@@ -1,16 +1,15 @@
 package item
 
 import (
-	"gopkg.in/mgo.v2/bson"
+	"fmt"
 )
 
 // Item - basic item type
 type Item struct {
-	Id          bson.ObjectId `json:"id" bson:"_id"`
-	Name        string        `json:"name" bson:"name"`
-	Price       uint          `json:"price" bson:"price"`
-	Amount      uint          `json:"amount" bson:"amount"`
-	Description string        `json:"description" bson:"description"`
+	Name        string  `json:"name" bson:"name"`
+	Price       float64 `json:"price" bson:"price"`
+	Amount      float64 `json:"amount" bson:"amount"`
+	Description string  `json:"description" bson:"description"`
 }
 
 // Builder - object that creates an item
@@ -21,7 +20,7 @@ type Builder struct {
 
 // NewBuilder - create a new ItemBuilder
 func NewBuilder() *Builder {
-	return &Builder{item: Item{Id: bson.NewObjectId()}}
+	return &Builder{item: Item{}}
 }
 
 func (b *Builder) Name(name string) *Builder {
@@ -31,14 +30,14 @@ func (b *Builder) Name(name string) *Builder {
 	return b
 }
 
-func (b *Builder) Price(price uint) *Builder {
+func (b *Builder) Price(price float64) *Builder {
 	b.actions = append(b.actions, func(item *Item) {
 		item.Price = price
 	})
 	return b
 }
 
-func (b *Builder) Amount(amount uint) *Builder {
+func (b *Builder) Amount(amount float64) *Builder {
 	b.actions = append(b.actions, func(item *Item) {
 		item.Amount = amount
 	})
@@ -57,4 +56,20 @@ func (b *Builder) Build() *Item {
 		action(&b.item)
 	}
 	return &b.item
+}
+
+func (it *Item) UpdateItem(toUpdate map[string]interface{}) {
+	for k, v := range toUpdate {
+		fmt.Println(k, v)
+		switch k {
+		case "name":
+			it.Name = v.(string)
+		case "price":
+			it.Price = v.(float64)
+		case "amount":
+			it.Amount = v.(float64)
+		case "description":
+			it.Description = v.(string)
+		}
+	}
 }
