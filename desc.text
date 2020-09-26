@@ -1,0 +1,81 @@
+Stock:
+contains item:
+    id
+    name
+    price
+    amount
+    description
+
+Reservation:
+    list (item,amount)
+    date
+    status
+
+Reservations: (pending / accepted)
+    list Reservation
+
+
+user-get-catalog <-- Reservation manager (reservation table + stock) <-- update-Stock
+user-post-reservation --> Reservation manager (check with stock) --> get-reservation 
+
+user requests a reservation for specific stock
+reservation manager checks that reservation is valid
+reservation manager sends email to admin to accept reservation
+upon reservation acception an update to the reservation table is made
+
+
+
+GET all-items split to reserved in dates and not reserved in dates
+
+
+
+jsonAvailable = mongo-get(date)
+{
+    "a": 23
+    "b": 15
+}
+
+
+
+
+
+
+User Requests:
+
+    catalog-service: 
+        get all items in dates
+        json: 
+        {
+            "date-start": "..."
+            "date-end": "..."
+        }
+
+    reservation-service:
+        make reservation
+        json: 
+        {
+            "email" : "..."
+            "phone-number" : "..." optional
+            "date-start": "..."
+            "date-end": "..."
+            "items": [
+                {
+                    "id": "..."
+                }
+            ]
+            "total-price": "..."
+        }
+        Store with generated id
+        Respone: return reservation id
+
+Admin Requests:
+
+    stock-service:
+        CRUD
+    
+    reservation-manager:
+        accept-reservation
+        json:
+        {
+            "reservation-id": "..."
+        }
