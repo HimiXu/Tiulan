@@ -11,6 +11,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// TODO: solve concurrency issues using a sessions manager
 var store *sessions.CookieStore
 
 func init() {
