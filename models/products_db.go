@@ -1,11 +1,10 @@
-package db
+package models
 
 import (
 	"context"
 	"log"
 	"time"
 
-	"github.com/HimiXu/Tiulan/stock-service/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,7 +12,7 @@ import (
 )
 
 type Result struct {
-	P  *models.Product
+	P  *Product
 	OK bool
 }
 
@@ -30,7 +29,7 @@ func createSession() (*mongo.Client, context.Context) {
 	return client, ctx
 }
 
-func CreateProduct(p models.Product) bool {
+func CreateProduct(p Product) bool {
 	client, ctx := createSession()
 	defer client.Disconnect(ctx)
 	collection := client.Database("Stock").Collection("Products")
@@ -46,13 +45,13 @@ func CreateProduct(p models.Product) bool {
 	}
 	return true
 }
-func GetAllProducts() []models.Product {
+func GetAllProducts() []Product {
 	client, ctx := createSession()
 	defer client.Disconnect(ctx)
 	collection := client.Database("Stock").Collection("Products")
 
 	cur, _ := collection.Find(ctx, bson.M{})
-	sp := make([]models.Product, 0)
+	sp := make([]Product, 0)
 	cur.All(ctx, &sp)
 	return sp
 }
@@ -63,7 +62,7 @@ func GetProduct(id string) Result {
 	collection := client.Database("Stock").Collection("Products")
 	oid, _ := primitive.ObjectIDFromHex(id)
 	cur, _ := collection.Find(ctx, bson.M{"_id": oid})
-	sp := make([]models.Product, 0)
+	sp := make([]Product, 0)
 	cur.All(ctx, &sp)
 	if len(sp) > 1 {
 		log.Fatal("more than one item with the same id")

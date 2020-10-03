@@ -1,20 +1,18 @@
-package controllers
+package product
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/HimiXu/Tiulan/stock-service/db"
-	"github.com/HimiXu/Tiulan/stock-service/models"
-
+	"github.com/HimiXu/Tiulan/models"
 	"github.com/julienschmidt/httprouter"
 )
 
 func GetProduct(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	id := params.ByName("id")
 	fmt.Println("got -", id)
-	res := db.GetProduct(id)
+	res := models.GetProduct(id)
 	fmt.Println("found -", res.OK)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
@@ -28,7 +26,7 @@ func GetProduct(w http.ResponseWriter, r *http.Request, params httprouter.Params
 func CreateProduct(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	var p models.Product
 	json.NewDecoder(r.Body).Decode(&p)
-	success := db.CreateProduct(p)
+	success := models.CreateProduct(p)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	if !success {
@@ -40,7 +38,7 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request, params httprouter.Par
 	id := params.ByName("id")
 	toUpdate := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&toUpdate)
-	success := db.UpdateProduct(id, toUpdate)
+	success := models.UpdateProduct(id, toUpdate)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	if !success {
@@ -50,12 +48,12 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request, params httprouter.Par
 
 func DeleteProduct(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	id := params.ByName("id")
-	db.DeleteProduct(id)
+	models.DeleteProduct(id)
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetAllProducts(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	sp := db.GetAllProducts()
+func GetProducts(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	sp := models.GetAllProducts()
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(sp)

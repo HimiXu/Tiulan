@@ -3,16 +3,16 @@ package main
 import (
 	"net/http"
 
-	"github.com/HimiXu/Tiulan/stock-service/controllers"
-	"github.com/julienschmidt/httprouter"
+	"github.com/HimiXu/Tiulan/cart"
+	"github.com/HimiXu/Tiulan/product"
 )
 
 func main() {
-	r := httprouter.New()
-	r.GET("/products/:id", controllers.GetProduct)
-	r.PUT("/products/:id", controllers.UpdateProduct)
-	r.DELETE("/products/:id", controllers.DeleteProduct)
-	r.POST("/products/create", controllers.CreateProduct)
-	r.GET("/products", controllers.GetAllProducts)
-	http.ListenAndServe(":8081", r)
+
+	mux := http.NewServeMux()
+
+	mux.Handle("/cart/", http.StripPrefix("/cart", cart.NewRouter()))
+	mux.Handle("/products/", http.StripPrefix("/products", product.NewRouter()))
+
+	http.ListenAndServe(":8080", mux)
 }
