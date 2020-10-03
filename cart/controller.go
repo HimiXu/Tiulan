@@ -14,6 +14,7 @@ import (
 var store *sessions.CookieStore
 
 func init() {
+	// TODO: update this to a configurable key
 	store = sessions.NewCookieStore([]byte("test"))
 }
 
