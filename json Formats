@@ -1,0 +1,67 @@
+## Product:
+
+{
+    "_id":"5f788629a0131d598d6fa76a",
+    "name":"test",
+    "price":10.5,
+    "amount":1,
+    "description":"this is a test"
+}
+
+
+## Products: 
+
+[
+    Product,
+    Product,
+    ...
+]
+
+##################################################
+
+
+## Cart:
+
+{
+    "items": 
+    {
+        "5f788629a0131d598d6fa76a": 
+        {
+            "_id": "5f788629a0131d598d6fa76a",
+            "name": "test",
+            "price": 10.5,
+            "Amount": 20
+        }
+    },
+    "total_price": 210
+}
+
+##################################################
+
+
+## Reservation:
+
+{
+    "id":"04935328-f13b-4a74-843f-69413327500f",
+    "dates":
+    [
+        "2020-10-10T10:10:10+10:00",
+        "2020-10-10T10:10:10+10:01"
+    ],
+    "timestamp":"2020-10-08T21:29:01.5170161+03:00",
+    "email":"peterhilla@gmail.com",
+    "items":
+        {
+            "5f788629a0131d598d6fa76a":1
+        }
+    }
+}
+
+
+## Reservations: 
+
+[
+    Reservation,
+    Reservation,
+    ...
+]
